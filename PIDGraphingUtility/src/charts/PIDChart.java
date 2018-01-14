@@ -13,7 +13,7 @@ public class PIDChart extends Application {
 	int i;
 	@Override public void start(Stage stage) {
 		double [] clearArray = new double[100];
-		for(i=0;i<100;i++) {
+		for(i = 0; i < 100;i++) {
 			clearArray[i]=0.0;
 		}
 		//Set up Network tables Connection 
