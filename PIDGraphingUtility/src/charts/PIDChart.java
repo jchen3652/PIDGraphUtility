@@ -11,7 +11,7 @@ import javafx.stage.Stage;
  
 public class PIDChart extends Application {		
 	int i;
-	final int pointsToGraph = 500;
+	final int pointsToGraph = 1000;
 	
 	@Override 
 	public void start(Stage stage) {
@@ -58,7 +58,7 @@ public class PIDChart extends Application {
 		
 		for(int i = 0; i<pointsToGraph; i+=1) {
 			ptTimestamp[i] = i;
-			ptMotor[i] = 1.1*Math.pow(i, 2);
+			ptMotor[i] = i;
 			ptEncoder[i] = Math.pow(i, 2);
 		}
 		
