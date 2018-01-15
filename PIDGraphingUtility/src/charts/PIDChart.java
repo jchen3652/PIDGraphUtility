@@ -11,16 +11,24 @@ import javafx.stage.Stage;
  
 public class PIDChart extends Application {		
 	int i;
-	@Override public void start(Stage stage) {
-		double [] clearArray = new double[100];
-		for(i = 0; i < 100;i++) {
+	final int pointsToGraph = 500;
+	
+	@Override 
+	public void start(Stage stage) {
+		double [] clearArray = new double[pointsToGraph];
+		for(i = 0; i < pointsToGraph;i++) {
 			clearArray[i]=0.0;
 		}
-		//Set up Network tables Connection 
-		NetworkTable.setClientMode();
-		NetworkTable.setIPAddress("roboRIO-500-FRC.local");//localhost //roboRIO-500-FRC.local //roboRIO-502-FRC.local
-		NetworkTable table = NetworkTable.getTable("PIDTuner");
-			
+		
+		//Sets up network tables connection. This stuff should be commented out when testing graph
+		/*
+		//NetworkTable.setClientMode();
+		//NetworkTable.setIPAddress("roboRIO-500-FRC.local");//localhost //roboRIO-500-FRC.local //roboRIO-502-FRC.local
+		//NetworkTable table = NetworkTable.getTable("PIDTuner");
+		*/	
+		
+		
+		
 		//Network tables access is slow you must delay 3 seconds to give it a chance to access 
 		// your requested table - without it you get zero values 
 		try {
@@ -28,11 +36,34 @@ public class PIDChart extends Application {
 		} catch (InterruptedException ex) {
 		//do nothing for right now 
 		}
-			
-		double[] ptTimestamp = table.getNumberArray("PTTimestamp", clearArray);
+		
+		
+		
+		//These are the actual array definitions from network tables
+		/*
+		double[] ptTimestamp = table.getNumberArray("PTTimestamp", clearArray);		
 		double[] ptMotor = table.getNumberArray("PTMotor", clearArray);  
 		double[] ptEncoder = table.getNumberArray("PTEncoder", clearArray);  
+		
+		*/
+		
+		
+		//These are the dummy array definitions to test the graph
+		double[] ptTimestamp = new double[pointsToGraph];	
+		double[] ptMotor = new double[pointsToGraph];
+		double[] ptEncoder = new double[pointsToGraph];
 
+		
+		
+		
+		for(int i = 0; i<pointsToGraph; i+=1) {
+			ptTimestamp[i] = i;
+			ptMotor[i] = 1.1*Math.pow(i, 2);
+			ptEncoder[i] = Math.pow(i, 2);
+		}
+		
+		
+		
 		stage.setTitle("Line Chart Sample");
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
@@ -49,7 +80,7 @@ public class PIDChart extends Application {
 		series2.setName("Encoder");
 		  	      
 	      
-		for(i=0;i<100;i++){
+		for(i=0;i<pointsToGraph;i++){ //i<100
 			String s=Double.toString(ptTimestamp[i]);
 			series1.getData().add(new XYChart.Data(s, ptMotor[i]));
 			series2.getData().add(new XYChart.Data(s, ptEncoder[i]));
