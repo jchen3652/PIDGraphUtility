@@ -9,7 +9,6 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
-
 //import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class PIDChart extends Application {		
@@ -29,11 +28,10 @@ public class PIDChart extends Application {
 		
 		NetworkTableInstance.getDefault().startClient("roboRIO-500-FRC.local");//localhost //roboRIO-500-FRC.local //roboRIO-502-FRC.local		
 		NetworkTable table = NetworkTableInstance.getDefault().getTable("PIDTuner");
-			
 		
 		/*
+		NetworkTable.setTeam(500);
 		//OLD NETWORK TABLES CODE
-		NetworkTable.setClientMode();
 		NetworkTable.setIPAddress("roboRIO-500-FRC.local");//localhost //roboRIO-500-FRC.local //roboRIO-502-FRC.local
 		NetworkTable table = NetworkTable.getTable("PIDTuner");
 		*/
@@ -48,12 +46,13 @@ public class PIDChart extends Application {
 		
 		
 		//NEW NETWORK TABLES CODE
-		Double[] ptTimestamp =  (Double[]) table.getEntry("PTTimestamp").getNumberArray(clearArray);
-		Double[] ptMotor = (Double[]) table.getEntry("PTMotor").getNumberArray(clearArray);
-		Double[] ptEncoder = (Double[]) table.getEntry("PTEncoder").getNumberArray(clearArray);
+		
+		Double[] ptTimestamp = table.getEntry("PTTimestamp").getDoubleArray(clearArray);
+		Double[] ptMotor = table.getEntry("PTMotor").getDoubleArray(clearArray);
+		Double[] ptEncoder =table.getEntry("PTEncoder").getDoubleArray(clearArray);
 		
 
-		/*
+	/*
 		//OLD NETWORK TABLES CODE
 		Double[] ptTimestamp = table.getNumberArray("PTTimestamp", clearArray);		
 		Double[] ptMotor = table.getNumberArray("PTMotor", clearArray);  
