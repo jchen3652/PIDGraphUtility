@@ -6,7 +6,11 @@
 			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="PIDGraphingUtility/src"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/Admin/Downloads/ntcore-jni-4.0.0-windowsx86-64.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Admin/Downloads/ntcore-java-4.0.0.jar"/>
+	<classpathentry kind="var" path="wpilib" sourcepath="wpilib.sources"/>
+	<classpathentry kind="var" path="wpilib.sources"/>
+	<classpathentry kind="var" path="wpiutil" sourcepath="wpiutil.sources"/>
+	<classpathentry kind="var" path="wpiutil.sources"/>
+	<classpathentry kind="var" path="networktables" sourcepath="networktables.sources"/>
+	<classpathentry kind="var" path="networktables.sources"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -9,12 +9,12 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
-//import edu.wpi.first.wpilibj.networktables.NetworkTable;
 
 public class PIDChart extends Application {		
 	int i;
 	int pointsToGraph;
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override 
 	public void start(Stage stage) {
 		Double [] clearArray = new Double[pointsToGraph];
@@ -31,15 +31,11 @@ public class PIDChart extends Application {
 		//do nothing for right now 
 		}
 		
-		//These are the actual array definitions from network tables
-
 		Double[] ptError = table.getEntry("PTError").getDoubleArray(clearArray);
 		Double[] ptTimestamp = table.getEntry("PTTimestamp").getDoubleArray(clearArray);
 		Double[] ptMotor = table.getEntry("PTMotor").getDoubleArray(clearArray);
 		Double[] ptEncoder =table.getEntry("PTEncoder").getDoubleArray(clearArray);
 		Number numberOfPoints = table.getEntry("NumberOfPoints").getNumber(0);
-		
-		
 		pointsToGraph = numberOfPoints.intValue();
 		
 		//Set properties for graph window
@@ -47,7 +43,7 @@ public class PIDChart extends Application {
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
 		xAxis.setLabel("Time");
-		final LineChart<String,Number> lineChart = new LineChart<String,Number>(xAxis,yAxis);
+		final LineChart<String, Number> lineChart = new LineChart<String, Number>(xAxis, yAxis);
 		 
 		lineChart.setTitle("FF503 PID Tuning");
 		lineChart.setCreateSymbols(false);							   
@@ -69,11 +65,7 @@ public class PIDChart extends Application {
 		}
 		  
 		Scene scene  = new Scene(lineChart,800,600);	   
-		lineChart.getData().addAll(
-				output, 
-				angle
-				,error
-				);
+		lineChart.getData().addAll(output, angle, error);
 		 
 		stage.setScene(scene);
 		stage.show();
