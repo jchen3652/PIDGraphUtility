@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 public class PIDChart extends Application {		
 	int i;
 	int pointsToGraph;
-	
+
 	@Override 
 	public void start(Stage stage) {
 		Double [] clearArray = new Double[pointsToGraph];
@@ -24,8 +24,6 @@ public class PIDChart extends Application {
 		
 		NetworkTableInstance.getDefault().startClient("roboRIO-500-FRC.local");//localhost //roboRIO-500-FRC.local //roboRIO-502-FRC.local		
 		NetworkTable table = NetworkTableInstance.getDefault().getTable("PIDTuner");
-		
-
 		
 		try {//Network tables access is slow you must delay 3 seconds to give it a chance to access your requested table 
 			Thread.sleep(3000);
@@ -54,24 +52,28 @@ public class PIDChart extends Application {
 		lineChart.setTitle("FF503 PID Tuning");
 		lineChart.setCreateSymbols(false);							   
 		 
-		XYChart.Series series1 = new XYChart.Series();
-		series1.setName("Motor");		  
+		XYChart.Series output = new XYChart.Series();
+		output.setName("Motor Output");		  
 		
-		XYChart.Series series2 = new XYChart.Series();
-		series2.setName("Angle");
+		XYChart.Series angle = new XYChart.Series();
+		angle.setName("Angle");
 		
 		XYChart.Series error = new XYChart.Series();
-		error.setName("Error");
+		error.setName("Remaining Error");
 		
 		for(i=0;i<pointsToGraph;i++){ //Graphs the points
 			String s=Double.toString(ptTimestamp[i]);
-			series1.getData().add(new XYChart.Data(s, ptMotor[i]));
-			series2.getData().add(new XYChart.Data(s, ptEncoder[i]));
+			output.getData().add(new XYChart.Data(s, ptMotor[i]));
+			angle.getData().add(new XYChart.Data(s, ptEncoder[i]));
 			error.getData().add(new XYChart.Data(s, ptError[i]));
 		}
 		  
 		Scene scene  = new Scene(lineChart,800,600);	   
-		lineChart.getData().addAll(series1, series2, error);
+		lineChart.getData().addAll(
+				output, 
+				angle
+				,error
+				);
 		 
 		stage.setScene(scene);
 		stage.show();
