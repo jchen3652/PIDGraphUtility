@@ -31,12 +31,25 @@ public class PIDChart extends Application {
 		//do nothing for right now 
 		}
 		
+		
 		Double[] ptError = table.getEntry("PTError").getDoubleArray(clearArray);
 		Double[] ptTimestamp = table.getEntry("PTTimestamp").getDoubleArray(clearArray);
 		Double[] ptMotor = table.getEntry("PTMotor").getDoubleArray(clearArray);
 		Double[] ptEncoder =table.getEntry("PTEncoder").getDoubleArray(clearArray);
 		Number numberOfPoints = table.getEntry("NumberOfPoints").getNumber(0);
 		pointsToGraph = numberOfPoints.intValue();
+		Number ptSetpoint = table.getEntry("setpoint").getNumber(0);
+		
+		Number[] setPointArray = new Number[pointsToGraph];
+		
+		
+		
+		
+		for(int i = 0; i<pointsToGraph; i+=1) {
+			 setPointArray[i] = ptSetpoint;
+
+		}
+		
 		
 		//Set properties for graph window
 		stage.setTitle("FF503 PID Tuning | Written by James Chen and Areeb Rahim");
@@ -47,25 +60,29 @@ public class PIDChart extends Application {
 		 
 		lineChart.setTitle("FF503 PID Tuning");
 		lineChart.setCreateSymbols(false);							   
-		 
+		
+
+		
 		XYChart.Series output = new XYChart.Series();
 		output.setName("Motor Output");		  
 		
 		XYChart.Series angle = new XYChart.Series();
 		angle.setName("Angle");
 		
-		XYChart.Series error = new XYChart.Series();
-		error.setName("Remaining Error");
+		XYChart.Series setpoint = new XYChart.Series();
+		setpoint.setName("Setpoint");
 		
 		for(i=0;i<pointsToGraph;i++){ //Graphs the points
 			String s=Double.toString(ptTimestamp[i]);
 			output.getData().add(new XYChart.Data(s, ptMotor[i]));
 			angle.getData().add(new XYChart.Data(s, ptEncoder[i]));
-			error.getData().add(new XYChart.Data(s, ptError[i]));
+			setpoint.getData().add(new XYChart.Data(s, setPointArray[i]));
 		}
-		  
+		
+		
+		
 		Scene scene  = new Scene(lineChart,800,600);	   
-		lineChart.getData().addAll(output, angle, error);
+		lineChart.getData().addAll(output, angle, setpoint);
 		 
 		stage.setScene(scene);
 		stage.show();
