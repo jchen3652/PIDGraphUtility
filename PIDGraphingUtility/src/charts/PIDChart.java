@@ -38,7 +38,7 @@ public class PIDChart extends Application {
 		Double[] ptEncoder =table.getEntry("PTEncoder").getDoubleArray(clearArray);
 		Number numberOfPoints = table.getEntry("NumberOfPoints").getNumber(0);
 		pointsToGraph = numberOfPoints.intValue();
-		Number ptSetpoint = table.getEntry("setpoint").getNumber(0);
+		Number ptSetpoint = table.getEntry("Setpoint").getNumber(0);
 		
 		Number[] setPointArray = new Number[pointsToGraph];
 		
