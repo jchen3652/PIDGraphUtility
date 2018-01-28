@@ -16,7 +16,7 @@ public class PIDChart extends Application {
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void start(Stage stage) {
+	public void start(Stage graphWindow) {
 		Double[] clearArray = new Double[0];
 		NetworkTableInstance.getDefault().startClient("roboRIO-500-FRC.local");// localhost; roboRIO-500-FRC.local;
 																				// roboRIO-502-FRC.local
@@ -59,11 +59,9 @@ public class PIDChart extends Application {
 			allNumberOfPoints.add(PTNumberOfPoints); // 3 //problem happening here
 			allSetpoints.add(setPointArray);
 		}
-		System.out.println("allnumberofpoints" + allNumberOfPoints.get(0));
-		System.out.println(allTimestamps);
-
+		
 		// Set properties for graph window
-		stage.setTitle("FF503 PID Tuning | Written by James Chen and Areeb Rahim");
+		graphWindow.setTitle("FF503 PID Tuning | Written by James Chen and Areeb Rahim");
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
 		xAxis.setLabel("Time");
@@ -106,10 +104,9 @@ public class PIDChart extends Application {
 			lineChart.getData().add(seriesObjectsArray.get(3 * i + 1));
 			lineChart.getData().add(seriesObjectsArray.get(3 * i + 2));
 		}
-		stage.setScene(scene);
-		stage.show();
+		graphWindow.setScene(scene);
+		graphWindow.show();
 	}
-
 	public static void main(String[] args) {
 		launch(args);
 	}
