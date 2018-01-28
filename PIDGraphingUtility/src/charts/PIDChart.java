@@ -31,21 +31,23 @@ public class PIDChart extends Application {
 		int numberOfRuns = table.getEntry("PTNumberOfRuns").getNumber(0).intValue();
 
 		ArrayList<Double[]> allTimestamps = new ArrayList<Double[]>();
-		ArrayList<Double[]> allMotors = new ArrayList<Double[]>();
-		ArrayList<Double[]> allEncoders = new ArrayList<Double[]>();
+		ArrayList<double[]> allMotors = new ArrayList<double[]>();
+		ArrayList<double[]> allEncoders = new ArrayList<double[]>();
+		ArrayList<double[]> allSetpoints = new ArrayList<double[]>();
 		ArrayList<Integer> allNumberOfPoints = new ArrayList<Integer>();
-
-		Number ptSetpoint = table.getEntry("Setpoint").getNumber(0);
+		
+		
+		
 
 		for (int i = 0; i < numberOfRuns; i += 1) {
 			Double[] PTTimestamp = table.getEntry("PTTimestamp " + Integer.toString(i + 1)).getDoubleArray(clearArray);
-			Double[] PTMotor = table.getEntry("PTMotor " + Integer.toString(i + 1)).getDoubleArray(clearArray);
-			Double[] PTEncoder = table.getEntry("PTEncoder " + Integer.toString(i + 1)).getDoubleArray(clearArray);
-			Integer PTNumberOfPoints = table.getEntry("NumberOfPoints " + Integer.toString(i + 1)).getNumber(0).intValue();
-			
-			System.out.println("ptnumberofpoints" + PTNumberOfPoints);
-			Number[] setPointArray = new Number[PTNumberOfPoints];
-
+			double[] PTMotor = Util
+					.toRealDoubleArray(table.getEntry("PTMotor " + Integer.toString(i + 1)).getDoubleArray(clearArray));
+			double[] PTEncoder = Util.toRealDoubleArray(
+					table.getEntry("PTEncoder " + Integer.toString(i + 1)).getDoubleArray(clearArray));
+			int PTNumberOfPoints = table.getEntry("NumberOfPoints " + Integer.toString(i + 1)).getNumber(0).intValue();
+			double[] setPointArray = new double[PTNumberOfPoints];
+			double ptSetpoint = table.getEntry("Setpoint " + Integer.toString(i + 1)).getNumber(0).doubleValue();
 			for (int n = 0; n < PTNumberOfPoints; n += 1) {
 				setPointArray[n] = ptSetpoint;
 
@@ -55,7 +57,10 @@ public class PIDChart extends Application {
 			allMotors.add(PTMotor);// 1
 			allEncoders.add(PTEncoder); // 2
 			allNumberOfPoints.add(PTNumberOfPoints); // 3 //problem happening here
+			allSetpoints.add(setPointArray);
 		}
+		System.out.println("allnumberofpoints" + allNumberOfPoints.get(0));
+		System.out.println(allTimestamps);
 
 		// Set properties for graph window
 		stage.setTitle("FF503 PID Tuning | Written by James Chen and Areeb Rahim");
@@ -71,23 +76,24 @@ public class PIDChart extends Application {
 
 		for (int i = 0; i < numberOfRuns; i++) {
 			XYChart.Series output = new XYChart.Series();
-			output.setName("Motor Output" + Integer.toString(i + 1));
+			output.setName("Motor Output " + Integer.toString(i + 1));
+			System.out.println("The name of the output is" + output.getName());
 
 			XYChart.Series angle = new XYChart.Series();
-			angle.setName("Angle" + Integer.toString(i + 1));
+			angle.setName("Distance " + Integer.toString(i + 1));
+			System.out.println("The name of the angle is" + angle.getName());
 
 			XYChart.Series setpoint = new XYChart.Series();
-			setpoint.setName("Setpoint" + Integer.toString(i + 1));
-
-			//there was a problem on this line
-			System.out.println(allNumberOfPoints.get(i).intValue());
-			for (int n = 0; n < allNumberOfPoints.get(i).intValue(); n+=1) { // Graphs the points
-				
-		
-				String s = Double.toString(allTimestamps.get(i)[n]);
-				output.getData().add(new XYChart.Data(s, allMotors.get(i)[n]));
-				angle.getData().add(new XYChart.Data(s, allEncoders.get(i)[n]));
-				setpoint.getData().add(new XYChart.Data(s, allEncoders.get(i)[n]));
+			setpoint.setName("Setpoint " + Integer.toString(i + 1));
+			System.out.println("The name of the setpointe is" + setpoint.getName());
+			
+			// there was a problem on this line
+			for (int n = 0; n < allNumberOfPoints.get(i); n++) { // Graphs the points
+			
+				 String s = (allTimestamps.get(i)[n]).toString(); 
+				 output.getData().add(new XYChart.Data(s, allMotors.get(i)[n])); 
+				 angle.getData().add (new XYChart.Data(s, allEncoders.get(i)[n]));
+				 setpoint.getData().add (new XYChart.Data(s, allSetpoints.get(i)[n]));
 			}
 			seriesObjectsArray.add(output);
 			seriesObjectsArray.add(angle);
@@ -95,10 +101,10 @@ public class PIDChart extends Application {
 		}
 
 		Scene scene = new Scene(lineChart, 800, 600);
-		for (int i = 0; i < numberOfRuns; i++) {
-			lineChart.getData().add(seriesObjectsArray.get(i));
-			lineChart.getData().add(seriesObjectsArray.get(i + 1));
-			lineChart.getData().add(seriesObjectsArray.get(i + 2));
+		for (int i = 0; i < numberOfRuns; i += 1) {
+			lineChart.getData().add(seriesObjectsArray.get(3 * i));
+			lineChart.getData().add(seriesObjectsArray.get(3 * i + 1));
+			lineChart.getData().add(seriesObjectsArray.get(3 * i + 2));
 		}
 		stage.setScene(scene);
 		stage.show();
