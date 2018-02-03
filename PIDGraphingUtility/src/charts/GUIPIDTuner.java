@@ -121,11 +121,7 @@ public class GUIPIDTuner extends Application {
 		startRobot.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				
-				
-				
-				
-				
+
 				SmartDashboardTable.getEntry("P").forceSetNumber(Double.parseDouble(pInput.getText()));
 				SmartDashboardTable.getEntry("I").forceSetNumber(Double.parseDouble(iInput.getText()));
 				SmartDashboardTable.getEntry("D").forceSetNumber(Double.parseDouble(dInput.getText()));
@@ -140,13 +136,12 @@ public class GUIPIDTuner extends Application {
 
 				SmartDashboardTable.getEntry("Confirm").forceSetBoolean(true);
 				Stage graphWindow = new Stage();
-				
+
 				while (SmartDashboardTable.getEntry("Finished").getBoolean(false) == false) {
 				}
-				
+
 				PIDChart.runGraph();
-				
-				
+
 				graphWindow.setTitle("FF503 PID Tuning | Written by James Chen and Areeb Rahim");
 				graphWindow.setScene(PIDChart.scene);
 				graphWindow.show();
