@@ -25,7 +25,6 @@ public class PIDChart extends Application {
 		try {// Network tables access is slow you must delay 3 seconds to give it a chance to
 			Thread.sleep(3000);
 		} catch (InterruptedException ex) {
-			// do nothing for right now
 		}
 
 		int numberOfRuns = table.getEntry("PTNumberOfRuns").getNumber(0).intValue();
@@ -35,9 +34,6 @@ public class PIDChart extends Application {
 		ArrayList<double[]> allEncoders = new ArrayList<double[]>();
 		ArrayList<double[]> allSetpoints = new ArrayList<double[]>();
 		ArrayList<Integer> allNumberOfPoints = new ArrayList<Integer>();
-		
-		
-		
 
 		for (int i = 0; i < numberOfRuns; i += 1) {
 			Double[] PTTimestamp = table.getEntry("PTTimestamp " + Integer.toString(i + 1)).getDoubleArray(clearArray);
@@ -48,14 +44,13 @@ public class PIDChart extends Application {
 			int PTNumberOfPoints = table.getEntry("NumberOfPoints " + Integer.toString(i + 1)).getNumber(0).intValue();
 			double[] setPointArray = new double[PTNumberOfPoints];
 			double ptSetpoint = table.getEntry("Setpoint " + Integer.toString(i + 1)).getNumber(0).doubleValue();
-			
+
 			System.out.println(PTTimestamp.length);
 			System.out.println(ptSetpoint);
-			
+
 			for (int n = 0; n < PTNumberOfPoints; n += 1) {
 				setPointArray[n] = ptSetpoint;
-				
-			
+
 			}
 
 			allTimestamps.add(PTTimestamp); // 0
@@ -64,7 +59,7 @@ public class PIDChart extends Application {
 			allNumberOfPoints.add(PTNumberOfPoints); // 3 //problem happening here
 			allSetpoints.add(setPointArray);
 		}
-		
+
 		// Set properties for graph window
 		graphWindow.setTitle("FF503 PID Tuning | Written by James Chen and Areeb Rahim");
 		final CategoryAxis xAxis = new CategoryAxis();
@@ -89,14 +84,14 @@ public class PIDChart extends Application {
 			XYChart.Series setpoint = new XYChart.Series();
 			setpoint.setName("Setpoint " + Integer.toString(i + 1));
 			System.out.println("The name of the setpointe is" + setpoint.getName());
-			
+
 			// there was a problem on this line
 			for (int n = 0; n < allTimestamps.get(i).length; n++) { // Graphs the points
-			
-				 String s = (allTimestamps.get(i)[n]).toString(); 
-				 output.getData().add(new XYChart.Data(s, allMotors.get(i)[n])); 
-				 angle.getData().add (new XYChart.Data(s, allEncoders.get(i)[n]));
-				 setpoint.getData().add (new XYChart.Data(s, allSetpoints.get(i)[n]));
+
+				String s = (allTimestamps.get(i)[n]).toString();
+				output.getData().add(new XYChart.Data(s, allMotors.get(i)[n]));
+				angle.getData().add(new XYChart.Data(s, allEncoders.get(i)[n]));
+				setpoint.getData().add(new XYChart.Data(s, allSetpoints.get(i)[n]));
 			}
 			seriesObjectsArray.add(output);
 			seriesObjectsArray.add(angle);
@@ -112,6 +107,7 @@ public class PIDChart extends Application {
 		graphWindow.setScene(scene);
 		graphWindow.show();
 	}
+
 	public static void main(String[] args) {
 		launch(args);
 	}

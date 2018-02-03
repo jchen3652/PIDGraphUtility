@@ -129,7 +129,7 @@ public class GUIPIDTuner extends Application {
 				SmartDashboardTable.getEntry("D").forceSetNumber(Double.parseDouble(dInput.getText()));
 				SmartDashboardTable.getEntry("Target (inches)")
 						.forceSetNumber(Double.parseDouble(distanceInput.getText()));
-				SmartDashboardTable.getEntry("Tolerance").forceSetNumber(Double.parseDouble(distanceInput.getText()));
+				SmartDashboardTable.getEntry("Tolerance").forceSetNumber(Double.parseDouble(tolerance.getText()));
 				SmartDashboardTable.getEntry("Hi advait").forceSetString("how's life man");
 				System.out.println("dang it" + Double.parseDouble(pInput.getText()));
 
@@ -180,9 +180,7 @@ public class GUIPIDTuner extends Application {
 
 					for (int n = 0; n < PTNumberOfPoints; n += 1) {
 						setPointArray[n] = ptSetpoint;
-
 					}
-
 					allTimestamps.add(PTTimestamp); // 0
 					allMotors.add(PTMotor);// 1
 					allEncoders.add(PTEncoder); // 2
@@ -236,10 +234,8 @@ public class GUIPIDTuner extends Application {
 				}
 				graphWindow.setScene(scene);
 				graphWindow.show();
-
 			}
 		});
-
 		HBox hbButtons = new HBox();
 		hbButtons.setSpacing(10.0);
 		hbButtons.getChildren().addAll(startRobot);
