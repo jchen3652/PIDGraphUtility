@@ -99,7 +99,6 @@ public class GUIPIDTuner extends Application {
 		Button loadDefaultValues = new Button();
 		loadDefaultValues.setText("Load Default Values");
 		loadDefaultValues.setOnAction(new EventHandler<ActionEvent>() {
-
 			@Override
 			public void handle(ActionEvent event) {
 				pInput.setText(Double.toString(defaultP));
@@ -140,8 +139,8 @@ public class GUIPIDTuner extends Application {
 				SmartDashboardTable.getEntry("Confirm").forceSetBoolean(true);
 				Stage graphWindow = new Stage();
 				while (SmartDashboardTable.getEntry("Finished").getBoolean(false) == false) {
-
 				}
+
 				Double[] clearArray = new Double[0];
 				NetworkTableInstance.getDefault().startClient("roboRIO-500-FRC.local");// localhost;
 																						// roboRIO-500-FRC.local;
@@ -215,7 +214,6 @@ public class GUIPIDTuner extends Application {
 
 					// there was a problem on this line
 					for (int n = 0; n < allTimestamps.get(i).length; n++) { // Graphs the points
-
 						String s = (allTimestamps.get(i)[n]).toString();
 						output.getData().add(new XYChart.Data(s, allMotors.get(i)[n]));
 						angle.getData().add(new XYChart.Data(s, allEncoders.get(i)[n]));
