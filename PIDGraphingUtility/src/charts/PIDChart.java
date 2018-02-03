@@ -48,9 +48,14 @@ public class PIDChart extends Application {
 			int PTNumberOfPoints = table.getEntry("NumberOfPoints " + Integer.toString(i + 1)).getNumber(0).intValue();
 			double[] setPointArray = new double[PTNumberOfPoints];
 			double ptSetpoint = table.getEntry("Setpoint " + Integer.toString(i + 1)).getNumber(0).doubleValue();
+			
+			System.out.println(PTTimestamp.length);
+			System.out.println(ptSetpoint);
+			
 			for (int n = 0; n < PTNumberOfPoints; n += 1) {
 				setPointArray[n] = ptSetpoint;
-
+				
+			
 			}
 
 			allTimestamps.add(PTTimestamp); // 0
@@ -86,7 +91,7 @@ public class PIDChart extends Application {
 			System.out.println("The name of the setpointe is" + setpoint.getName());
 			
 			// there was a problem on this line
-			for (int n = 0; n < allNumberOfPoints.get(i); n++) { // Graphs the points
+			for (int n = 0; n < allTimestamps.get(i).length; n++) { // Graphs the points
 			
 				 String s = (allTimestamps.get(i)[n]).toString(); 
 				 output.getData().add(new XYChart.Data(s, allMotors.get(i)[n])); 

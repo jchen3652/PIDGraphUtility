@@ -16,8 +16,11 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -30,18 +33,18 @@ public class GUIPIDTuner extends Application {
 	static NetworkTable PIDTunerTable;
 	static NetworkTable SmartDashboardTable;
 
-	double defaultP = 0.15;
-	double defaultI = 0.0;
-	double defaultD = 0.02;
-	double defaultTolerance = 0.1;
-	double defaultDistance = 24;
+	private static final double defaultP = 0.15;
+	private static final double defaultI = 0.0;
+	private static final double defaultD = 0.02;
+	private static final double defaultTolerance = 0.1;
+	private static final double defaultDistance = 24;
 
 	public static void main(String[] args) {
 		NetworkTableInstance.getDefault().startClient("roboRIO-500-FRC.local");// localhost
 		// //roboRIO-500-FRC.local
 		// //roboRIO-502-FRC.local
 		PIDTunerTable = NetworkTableInstance.getDefault().getTable("PIDTuner");
-		SmartDashboardTable = NetworkTableInstance.getDefault().getTable("Smart Dashboard");
+		SmartDashboardTable = NetworkTableInstance.getDefault().getTable("SmartDashboard");
 		launch(args);
 	}
 
@@ -53,10 +56,14 @@ public class GUIPIDTuner extends Application {
 		grid.setHgap(10);
 		grid.setVgap(10);
 
+		StackPane sp = new StackPane();
+		Image img = new Image("https://pbs.twimg.com/profile_images/874276197357596672/kUuht00m.jpg");
+		ImageView imgView = new ImageView(img);
+		// sp.getChildren().add(imgView);
+
 		final TextField pInput = new TextField();
 		pInput.setPromptText("P Value");
 		pInput.setPrefColumnCount(10);
-		///////////////////////////////////////////////
 		GridPane.setConstraints(pInput, 1, 0);
 		grid.add(new Label("Enter the P Value: "), 0, 0);
 		grid.getChildren().add(pInput);
@@ -64,7 +71,6 @@ public class GUIPIDTuner extends Application {
 		final TextField iInput = new TextField();
 		iInput.setPromptText("I Value");
 		iInput.setPrefColumnCount(10);
-		//////////////////////////////////////////////////
 		GridPane.setConstraints(iInput, 1, 1);
 		grid.add(new Label("Enter the I Value: "), 0, 1);
 		grid.getChildren().add(iInput);
@@ -104,54 +110,43 @@ public class GUIPIDTuner extends Application {
 			}
 		});
 
-		Button sendConfirm = new Button();
-		sendConfirm.setText("Confirm values");
-		sendConfirm.setOnAction(new EventHandler<ActionEvent>() {
-
-			Label ErrorMessage = new Label();
-			Label SuccessMessage = new Label();
-
+		Button stopRobot = new Button();
+		stopRobot.setText("STOP THE FRIGGIN ROBOT");
+		stopRobot.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				try {
-					ErrorMessage.setText("");
-					SmartDashboardTable.getEntry("P").forceSetNumber(Double.parseDouble(pInput.getText()));
-					SmartDashboardTable.getEntry("I").forceSetNumber(Double.parseDouble(iInput.getText()));
-					SmartDashboardTable.getEntry("D").forceSetNumber(Double.parseDouble(dInput.getText()));
-					SmartDashboardTable.getEntry("Target (inches)")
-							.forceSetNumber(Double.parseDouble(distanceInput.getText()));
-					SmartDashboardTable.getEntry("Tolerance")
-							.forceSetNumber(Double.parseDouble(distanceInput.getText()));
-					SuccessMessage.setText("Values have been sent to network tables");
-					grid.add(SuccessMessage, 3, 0);
-
-					System.out.println("P is " + pInput.getText());
-					System.out.println("I is " + iInput.getText());
-					System.out.println("D is " + dInput.getText());
-				} catch (Exception e) {
-					SuccessMessage.setText("");
-					ErrorMessage.setText("Check that your inputs are doubles");
-					grid.add(ErrorMessage, 3, 0);
-				}
+				SmartDashboardTable.getEntry("robotStop").forceSetBoolean(true);
 			}
 		});
 
-		Button startGrapher = new Button();
-		startGrapher.setText("Run the robot program (SAY CLEAR)");
-		startGrapher.setOnAction(new EventHandler<ActionEvent>() {
+		Button startRobot = new Button();
+		startRobot.setText("Run the robot program (SAY CLEAR)");
+		startRobot.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				SmartDashboardTable.getEntry("P").forceSetNumber(Double.parseDouble(pInput.getText()));
+				SmartDashboardTable.getEntry("I").forceSetNumber(Double.parseDouble(iInput.getText()));
+				SmartDashboardTable.getEntry("D").forceSetNumber(Double.parseDouble(dInput.getText()));
+				SmartDashboardTable.getEntry("Target (inches)")
+						.forceSetNumber(Double.parseDouble(distanceInput.getText()));
+				SmartDashboardTable.getEntry("Tolerance").forceSetNumber(Double.parseDouble(distanceInput.getText()));
+				SmartDashboardTable.getEntry("Hi advait").forceSetString("how's life man");
+				System.out.println("dang it" + Double.parseDouble(pInput.getText()));
+
+				System.out.println("P is " + pInput.getText());
+				System.out.println("I is " + iInput.getText());
+				System.out.println("D is " + dInput.getText());
+
 				SmartDashboardTable.getEntry("Confirm").forceSetBoolean(true);
-				grid.add(new Label("Please wait..."), 1, 5);
 				Stage graphWindow = new Stage();
+				while (SmartDashboardTable.getEntry("Finished").getBoolean(false) == false) {
+
+				}
 				Double[] clearArray = new Double[0];
 				NetworkTableInstance.getDefault().startClient("roboRIO-500-FRC.local");// localhost;
 																						// roboRIO-500-FRC.local;
 																						// roboRIO-502-FRC.local
 				NetworkTable table = NetworkTableInstance.getDefault().getTable("PIDTuner");
-
-				while (PIDTunerTable.getEntry("Program Finished").getBoolean(false) != true) {
-				}
 
 				try {// Network tables access is slow you must delay 3 seconds to give it a chance to
 					Thread.sleep(3000);
@@ -179,6 +174,10 @@ public class GUIPIDTuner extends Application {
 					double[] setPointArray = new double[PTNumberOfPoints];
 					double ptSetpoint = table.getEntry("Setpoint " + Integer.toString(i + 1)).getNumber(0)
 							.doubleValue();
+
+					System.out.println(PTTimestamp.length);
+					System.out.println(ptSetpoint);
+
 					for (int n = 0; n < PTNumberOfPoints; n += 1) {
 						setPointArray[n] = ptSetpoint;
 
@@ -216,7 +215,9 @@ public class GUIPIDTuner extends Application {
 					setpoint.setName("Setpoint " + Integer.toString(i + 1));
 					System.out.println("The name of the setpointe is" + setpoint.getName());
 
-					for (int n = 0; n < allNumberOfPoints.get(i); n++) { // Graphs the points
+					// there was a problem on this line
+					for (int n = 0; n < allTimestamps.get(i).length; n++) { // Graphs the points
+
 						String s = (allTimestamps.get(i)[n]).toString();
 						output.getData().add(new XYChart.Data(s, allMotors.get(i)[n]));
 						angle.getData().add(new XYChart.Data(s, allEncoders.get(i)[n]));
@@ -226,6 +227,7 @@ public class GUIPIDTuner extends Application {
 					seriesObjectsArray.add(angle);
 					seriesObjectsArray.add(setpoint);
 				}
+
 				Scene scene = new Scene(lineChart, 800, 600);
 				for (int i = 0; i < numberOfRuns; i += 1) {
 					lineChart.getData().add(seriesObjectsArray.get(3 * i));
@@ -234,14 +236,17 @@ public class GUIPIDTuner extends Application {
 				}
 				graphWindow.setScene(scene);
 				graphWindow.show();
+
 			}
 		});
+
 		HBox hbButtons = new HBox();
 		hbButtons.setSpacing(10.0);
-		hbButtons.getChildren().addAll(startGrapher, sendConfirm);
-		grid.add(startGrapher, 0, 6);
-		grid.add(sendConfirm, 0, 5);
+		hbButtons.getChildren().addAll(startRobot);
+		grid.add(startRobot, 0, 6);
 		grid.add(loadDefaultValues, 0, 7);
+		grid.add(stopRobot, 0, 8);
+		grid.add(sp, 3, 0);
 		mainWindow.setScene(new Scene(grid, 600, 400));
 		mainWindow.show();
 	}
