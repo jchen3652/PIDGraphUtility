@@ -11,23 +11,24 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
-
+@SuppressWarnings({ "unchecked", "rawtypes" })
 public class PIDChart extends Application {
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public void start(Stage graphWindow) {
-		Double[] clearArray = new Double[0];
-		NetworkTableInstance.getDefault().startClient("roboRIO-500-FRC.local");// localhost; roboRIO-500-FRC.local;
-																				// roboRIO-502-FRC.local
-		NetworkTable table = NetworkTableInstance.getDefault().getTable("PIDTuner");
-
+	static NetworkTable PIDTunerTable;
+	static Double[] clearArray = new Double[0];
+	static Scene scene;
+	public PIDChart() {
+		NetworkTableInstance.getDefault().startClient("roboRIO-500-FRC.local");// localhost;
+		PIDTunerTable = NetworkTableInstance.getDefault().getTable("PIDTuner"); // roboRIO-500-FRC.local;// roboRIO-502-FRC.local
+	}
+	
+	public static void runGraph() {
 		try {// Network tables access is slow you must delay 3 seconds to give it a chance to
 			Thread.sleep(3000);
 		} catch (InterruptedException ex) {
+			// do nothing for right now
 		}
 
-		int numberOfRuns = table.getEntry("PTNumberOfRuns").getNumber(0).intValue();
+		int numberOfRuns = PIDTunerTable.getEntry("PTNumberOfRuns").getNumber(0).intValue();
 
 		ArrayList<Double[]> allTimestamps = new ArrayList<Double[]>();
 		ArrayList<double[]> allMotors = new ArrayList<double[]>();
@@ -36,23 +37,24 @@ public class PIDChart extends Application {
 		ArrayList<Integer> allNumberOfPoints = new ArrayList<Integer>();
 
 		for (int i = 0; i < numberOfRuns; i += 1) {
-			Double[] PTTimestamp = table.getEntry("PTTimestamp " + Integer.toString(i + 1)).getDoubleArray(clearArray);
-			double[] PTMotor = Util
-					.toRealDoubleArray(table.getEntry("PTMotor " + Integer.toString(i + 1)).getDoubleArray(clearArray));
+			Double[] PTTimestamp = PIDTunerTable.getEntry("PTTimestamp " + Integer.toString(i + 1))
+					.getDoubleArray(PIDChart.clearArray);
+			double[] PTMotor = Util.toRealDoubleArray(
+					PIDTunerTable.getEntry("PTMotor " + Integer.toString(i + 1)).getDoubleArray(PIDChart.clearArray));
 			double[] PTEncoder = Util.toRealDoubleArray(
-					table.getEntry("PTEncoder " + Integer.toString(i + 1)).getDoubleArray(clearArray));
-			int PTNumberOfPoints = table.getEntry("NumberOfPoints " + Integer.toString(i + 1)).getNumber(0).intValue();
+					PIDTunerTable.getEntry("PTEncoder " + Integer.toString(i + 1)).getDoubleArray(PIDChart.clearArray));
+			int PTNumberOfPoints = PIDTunerTable.getEntry("NumberOfPoints " + Integer.toString(i + 1)).getNumber(0)
+					.intValue();
 			double[] setPointArray = new double[PTNumberOfPoints];
-			double ptSetpoint = table.getEntry("Setpoint " + Integer.toString(i + 1)).getNumber(0).doubleValue();
+			double ptSetpoint = PIDTunerTable.getEntry("Setpoint " + Integer.toString(i + 1)).getNumber(0)
+					.doubleValue();
 
 			System.out.println(PTTimestamp.length);
 			System.out.println(ptSetpoint);
 
 			for (int n = 0; n < PTNumberOfPoints; n += 1) {
 				setPointArray[n] = ptSetpoint;
-
 			}
-
 			allTimestamps.add(PTTimestamp); // 0
 			allMotors.add(PTMotor);// 1
 			allEncoders.add(PTEncoder); // 2
@@ -61,7 +63,7 @@ public class PIDChart extends Application {
 		}
 
 		// Set properties for graph window
-		graphWindow.setTitle("FF503 PID Tuning | Written by James Chen and Areeb Rahim");
+		
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
 		xAxis.setLabel("Time");
@@ -87,7 +89,6 @@ public class PIDChart extends Application {
 
 			// there was a problem on this line
 			for (int n = 0; n < allTimestamps.get(i).length; n++) { // Graphs the points
-
 				String s = (allTimestamps.get(i)[n]).toString();
 				output.getData().add(new XYChart.Data(s, allMotors.get(i)[n]));
 				angle.getData().add(new XYChart.Data(s, allEncoders.get(i)[n]));
@@ -98,12 +99,19 @@ public class PIDChart extends Application {
 			seriesObjectsArray.add(setpoint);
 		}
 
-		Scene scene = new Scene(lineChart, 800, 600);
+		PIDChart.scene = new Scene(lineChart, 800, 600);
 		for (int i = 0; i < numberOfRuns; i += 1) {
 			lineChart.getData().add(seriesObjectsArray.get(3 * i));
 			lineChart.getData().add(seriesObjectsArray.get(3 * i + 1));
 			lineChart.getData().add(seriesObjectsArray.get(3 * i + 2));
 		}
+	}
+	
+	
+	@Override
+	public void start(Stage graphWindow) {
+		runGraph();
+		graphWindow.setTitle("FF503 PID Tuning | Written by James Chen and Areeb Rahim");
 		graphWindow.setScene(scene);
 		graphWindow.show();
 	}
