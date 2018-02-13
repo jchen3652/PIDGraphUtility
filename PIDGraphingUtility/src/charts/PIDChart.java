@@ -49,9 +49,6 @@ public class PIDChart extends Application {
 			double ptSetpoint = PIDTunerTable.getEntry("Setpoint " + Integer.toString(i + 1)).getNumber(0)
 					.doubleValue();
 
-			System.out.println(PTTimestamp.length);
-			System.out.println(ptSetpoint);
-
 			for (int n = 0; n < PTNumberOfPoints; n += 1) {
 				setPointArray[n] = ptSetpoint;
 			}
@@ -77,25 +74,22 @@ public class PIDChart extends Application {
 		for (int i = 0; i < numberOfRuns; i++) {
 			XYChart.Series output = new XYChart.Series();
 			output.setName("Motor Output " + Integer.toString(i + 1));
-			System.out.println("The name of the output is" + output.getName());
 
-			XYChart.Series angle = new XYChart.Series();
-			angle.setName("Distance " + Integer.toString(i + 1));
-			System.out.println("The name of the angle is" + angle.getName());
+			XYChart.Series position = new XYChart.Series();
+			position.setName("Distance " + Integer.toString(i + 1));
 
 			XYChart.Series setpoint = new XYChart.Series();
 			setpoint.setName("Setpoint " + Integer.toString(i + 1));
-			System.out.println("The name of the setpointe is" + setpoint.getName());
 
 			// there was a problem on this line
 			for (int n = 0; n < allTimestamps.get(i).length; n++) { // Graphs the points
 				String s = (allTimestamps.get(i)[n]).toString();
 				output.getData().add(new XYChart.Data(s, allMotors.get(i)[n]));
-				angle.getData().add(new XYChart.Data(s, allEncoders.get(i)[n]));
+				position.getData().add(new XYChart.Data(s, allEncoders.get(i)[n]));
 				setpoint.getData().add(new XYChart.Data(s, allSetpoints.get(i)[n]));
 			}
 			seriesObjectsArray.add(output);
-			seriesObjectsArray.add(angle);
+			seriesObjectsArray.add(position);
 			seriesObjectsArray.add(setpoint);
 		}
 
