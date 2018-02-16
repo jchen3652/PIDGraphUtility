@@ -17,28 +17,60 @@ public class UniversalGraphingUtility extends Application {
 	static NetworkTable PIDTunerTable;
 	static Double[] clearArray = new Double[0];
 	static Scene scene;
+	static int xIndex = 1;
 
-	public UniversalGraphingUtility() {
+	
+	
+	public UniversalGraphingUtility() {																	
+	}
+
+	public static void setIndependentVariableIndex(int i) {
+		xIndex = i;
+	}
+	
+	public static void runGraph() {
+		ArrayList<Integer> yIndexes = new ArrayList<Integer>();
+		yIndexes.add(0);
+		
 		NetworkTableInstance.getDefault().startClient("roboRIO-500-FRC.local");// localhost;
 		PIDTunerTable = NetworkTableInstance.getDefault().getTable("PIDTuner"); // roboRIO-500-FRC.local;//
 																				// roboRIO-502-FRC.local
-	}
-
-	public static void runGraph() {
 		try {// Network tables access is slow you must delay 3 seconds to give it a chance to
 			Thread.sleep(3000);
 		} catch (InterruptedException ex) {
-			// do nothing for right now
 		}
+		
+		//Dummy variables initialized
 		String[] defaultd = new String[2];
 		defaultd[0] = "test0";
 		defaultd[1] = "test1";
-
+		Double[] PTMotor = new Double[100];
+		Double[] PTTimestamp = new Double[100];
+		Double[] PTEncoder = new Double[100];
+		for (int i = 0; i < 100; i++) {
+			PTMotor[i] = i * i * 1.0;
+			PTTimestamp[i] = i * 0.1;
+			PTEncoder[i] = 0.0;
+		}		
+		ArrayList<Double[]> allDummyDataValues = new ArrayList<Double[]>();
+		allDummyDataValues.add(PTMotor);
+		allDummyDataValues.add(PTTimestamp);
+		allDummyDataValues.add(PTEncoder);
+		
+		
 		String[] allNTNames = new String[defaultd.length];
 		ArrayList<Double[]> allDataValues = new ArrayList<Double[]>();
 		
-		allNTNames = defaultd; // PIDTunerTable.getEntry("All Key Names").getStringArray(defaultd);
+		allNTNames = PIDTunerTable.getEntry("All Key Names").getStringArray(defaultd);
 
+		
+		
+		
+		for(int i = 0; i < allNTNames.length; i++) {
+			Double[] Array = PIDTunerTable.getEntry(allNTNames[i]).getDoubleArray(allDummyDataValues.get(i));
+			allDataValues.add(Array);
+		}
+		
 		/*
 		 * Double[] PTMotor =
 		 * PIDTunerTable.getEntry(allNTNames[0]).getDoubleArray(clearArray); Double[]
@@ -47,18 +79,9 @@ public class UniversalGraphingUtility extends Application {
 		 * PTEncoder = PIDTunerTable.getEntry(allNTNames[2]).getDoubleArray(clearArray);
 		 */
 
-		Double[] PTMotor = new Double[100];
-		Double[] PTTimestamp = new Double[100];
-		Double[] PTEncoder = new Double[100];
-
-		for (int i = 0; i < 100; i++) {
-			PTMotor[i] = i * i * 1.0;
-			PTTimestamp[i] = i * 0.1;
-			PTEncoder[i] = 0.0;
-		}
 
 		ArrayList<XYChart.Series> seriesObjectsArray = new ArrayList<XYChart.Series>();
-		for (int i = 0; i < allNTNames.length; i++) {
+		for (int i :yIndexes) {
 			XYChart.Series output = new XYChart.Series();
 			output.setName(allNTNames[i]);
 			seriesObjectsArray.add(output);
@@ -74,20 +97,20 @@ public class UniversalGraphingUtility extends Application {
 		lineChart.setTitle("FF503 PID Tuning");
 		lineChart.setCreateSymbols(false);
 
-		// there was a problem on this line
-		for (int n = 0; n < PTTimestamp.length; n++) { // Graphs the points
-			String s = (PTTimestamp[n]).toString();
-			for (XYChart.Series o : seriesObjectsArray) {
-				o.getData().add(new XYChart.Data(s, PTMotor[n]));
+
+		for (int n = 0; n < allDataValues.get(xIndex).length; n++) {
+			String s = (allDataValues.get(xIndex)[n]).toString();
+			for (int i : yIndexes) {
+				seriesObjectsArray.get(i).getData().add(new XYChart.Data(s, allDataValues.get(i)[n]));
 			}
 
 		}
 
-		UniversalGraphingUtility.scene = new Scene(lineChart, 800, 600);
+		
 		for (XYChart.Series o : seriesObjectsArray) {
 			lineChart.getData().add(o);
 		}
-
+		UniversalGraphingUtility.scene = new Scene(lineChart, 800, 600);
 	}
 
 	@Override
