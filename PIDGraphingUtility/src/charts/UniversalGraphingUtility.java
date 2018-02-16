@@ -30,13 +30,14 @@ public class UniversalGraphingUtility extends Application {
 		} catch (InterruptedException ex) {
 			// do nothing for right now
 		}
+		String[] defaultd = new String[2];
+		defaultd[0] = "test0";
+		defaultd[1] = "test1";
 
-		String[] dummyNameArray = new String[3];
-		dummyNameArray[0] = "Motor Output";
-		dummyNameArray[1] = "Timestamp";
-		dummyNameArray[2] = "Position";
-
-		String[] allNTNames = PIDTunerTable.getEntry("All Key Names").getStringArray(dummyNameArray);
+		String[] allNTNames = new String[defaultd.length];
+		ArrayList<Double[]> allDataValues = new ArrayList<Double[]>();
+		
+		allNTNames = defaultd; // PIDTunerTable.getEntry("All Key Names").getStringArray(defaultd);
 
 		/*
 		 * Double[] PTMotor =
@@ -56,6 +57,13 @@ public class UniversalGraphingUtility extends Application {
 			PTEncoder[i] = 0.0;
 		}
 
+		ArrayList<XYChart.Series> seriesObjectsArray = new ArrayList<XYChart.Series>();
+		for (int i = 0; i < allNTNames.length; i++) {
+			XYChart.Series output = new XYChart.Series();
+			output.setName(allNTNames[i]);
+			seriesObjectsArray.add(output);
+		}
+
 		// Set properties for graph window
 
 		final CategoryAxis xAxis = new CategoryAxis();
@@ -66,28 +74,19 @@ public class UniversalGraphingUtility extends Application {
 		lineChart.setTitle("FF503 PID Tuning");
 		lineChart.setCreateSymbols(false);
 
-		ArrayList<XYChart.Series> seriesObjectsArray = new ArrayList<XYChart.Series>();
-
-		XYChart.Series output = new XYChart.Series();
-
-		output.setName(allNTNames[0]);
-
-		XYChart.Series position = new XYChart.Series();
-		position.setName(allNTNames[2]);
-
 		// there was a problem on this line
 		for (int n = 0; n < PTTimestamp.length; n++) { // Graphs the points
 			String s = (PTTimestamp[n]).toString();
-			output.getData().add(new XYChart.Data(s, PTMotor[n]));
-			position.getData().add(new XYChart.Data(s, PTEncoder[n]));
+			for (XYChart.Series o : seriesObjectsArray) {
+				o.getData().add(new XYChart.Data(s, PTMotor[n]));
+			}
+
 		}
-		seriesObjectsArray.add(output);
-		seriesObjectsArray.add(position);
 
 		UniversalGraphingUtility.scene = new Scene(lineChart, 800, 600);
-
-		lineChart.getData().add(seriesObjectsArray.get(0));
-		lineChart.getData().add(seriesObjectsArray.get(1));
+		for (XYChart.Series o : seriesObjectsArray) {
+			lineChart.getData().add(o);
+		}
 
 	}
 
