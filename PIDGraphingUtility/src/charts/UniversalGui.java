@@ -22,8 +22,8 @@ public class UniversalGui extends Application {
 	int i;
 	int pointsToGraph;
 	static NetworkTable PIDTunerTable;
-	int xIndex;
 	Stage graphWindow = new Stage();
+	static ArrayList<CheckBox> checkBoxArray;
 
 	public static void main(String[] args) {
 		NetworkTableInstance.getDefault().startClient("roboRIO-500-FRC.local");// localhost roboRIO-500-FRC.local
@@ -50,11 +50,25 @@ public class UniversalGui extends Application {
 			tunerOptions.add(o);
 		}
 
+		checkBoxArray = new ArrayList<CheckBox>();
+		for (String o : allKeyNames) {
+			CheckBox cb = new CheckBox();
+			cb.setText(o);
+			checkBoxArray.add(cb);
+		}
+		
 		Button graphThings = new Button();
 		graphThings.setText("Graph");
 		graphThings.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				for (int i = 0; i < checkBoxArray.size(); i++) {
+					if (checkBoxArray.get(i).isSelected()) {
+						UniversalGraphingUtility.yIndexes.add(i);
+						// UniversalGraphingUtility.addDependentVariableIndex(i);
+					}
+				}
+
 				UniversalGraphingUtility.runGraph();
 				graphWindow.setTitle("FF503 PID Tuning | Written by James Chen and Areeb Rahim");
 				graphWindow.setScene(UniversalGraphingUtility.scene);
@@ -64,13 +78,6 @@ public class UniversalGui extends Application {
 
 		final ComboBox<String> tunerBox = new ComboBox<String>(tunerOptions);
 		tunerBox.setPromptText("X Variable");
-
-		ArrayList<CheckBox> checkBoxArray = new ArrayList<CheckBox>();
-		for (String o : allKeyNames) {
-			CheckBox cb = new CheckBox();
-			cb.setText(o);
-			checkBoxArray.add(cb);
-		}
 
 		grid.add(new Label("What Y variables should be graphed?"), 0, 1);
 		for (int i = 0; i < allKeyNames.length; i++) {
@@ -87,8 +94,8 @@ public class UniversalGui extends Application {
 		tunerBox.valueProperty().addListener((obs, oldItem, newItem) -> {
 			for (int i = 0; i < allKeyNames.length; i++) {
 				if (newItem == allKeyNames[i]) {
-					xIndex = i;
-					System.out.println(i);
+					UniversalGraphingUtility.setIndependentVariableIndex(i);
+
 				}
 			}
 		});
