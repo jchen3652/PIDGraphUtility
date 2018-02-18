@@ -26,10 +26,12 @@ public class UniversalGui extends Application {
 	Stage graphWindow = new Stage();
 	static ArrayList<CheckBox> checkBoxArray;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InterruptedException {
 		NetworkTableInstance.getDefault().startClient("roboRIO-500-FRC.local");// localhost roboRIO-500-FRC.local
 																				// roboRIO-502-FRC.local
 		PIDTunerTable = NetworkTableInstance.getDefault().getTable("PIDTuner");
+		Thread.sleep(3000);
+		
 		launch(args);
 	}
 
@@ -54,7 +56,7 @@ public class UniversalGui extends Application {
 		}
 
 		checkBoxArray = new ArrayList<CheckBox>();
-		for (String o : allKeyNames) {
+		for (String o : PIDTunerTable.getEntry("All Key Names").getStringArray(defaultAllKeyNames)) {
 			CheckBox cb = new CheckBox();
 			cb.setText(o);
 			checkBoxArray.add(cb);
@@ -65,6 +67,12 @@ public class UniversalGui extends Application {
 		graphThings.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				UniversalGraphingUtility.yIndexes.clear();
 				for (int i = 0; i < checkBoxArray.size(); i++) {
 					if (checkBoxArray.get(i).isSelected()) {
