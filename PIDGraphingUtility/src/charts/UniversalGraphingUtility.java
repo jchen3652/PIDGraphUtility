@@ -21,7 +21,7 @@ public class UniversalGraphingUtility extends Application {
 	public static ArrayList<Integer> yIndexes = new ArrayList<Integer>();
 
 	public UniversalGraphingUtility() {
-
+		
 	}
 
 	public static void setIndependentVariableIndex(int i) {
@@ -44,26 +44,27 @@ public class UniversalGraphingUtility extends Application {
 		}
 
 		// Dummy variables initialized
-		String[] defaultd = new String[2];
-		defaultd[0] = "test0";
-		defaultd[1] = "test1";
-		Double[] PTMotor = new Double[100];
-		Double[] PTTimestamp = new Double[100];
-		Double[] PTEncoder = new Double[100];
-		for (int i = 0; i < 100; i++) {
-			PTMotor[i] = i * i * 1.0;
-			PTTimestamp[i] = i * 0.1;
-			PTEncoder[i] = 0.0;
+		String[] defaultAllKeyNames = new String[3];
+		defaultAllKeyNames[0] = "x";
+		defaultAllKeyNames[1] = "y";
+		defaultAllKeyNames[2] = "y2";
+		Double[] xValue = new Double[20];
+		Double[] yValue = new Double[20];
+		Double[] y2Value = new Double[20];
+		for (int i = 0; i < 20; i++) {
+			xValue[i] = i*1.0;
+			yValue[i] = Math.pow(i, 0.333333) * 1.0;
+			y2Value[i] = i/4.0;
 		}
 		ArrayList<Double[]> allDummyDataValues = new ArrayList<Double[]>();
-		allDummyDataValues.add(PTMotor);
-		allDummyDataValues.add(PTTimestamp);
-		allDummyDataValues.add(PTEncoder);
+		allDummyDataValues.add(xValue);
+		allDummyDataValues.add(yValue);
+		allDummyDataValues.add(y2Value);
 
-		String[] allNTNames = new String[defaultd.length];
+		String[] allNTNames = new String[defaultAllKeyNames.length];
 		ArrayList<Double[]> allDataValues = new ArrayList<Double[]>();
 
-		allNTNames = PIDTunerTable.getEntry("All Key Names").getStringArray(defaultd);
+		allNTNames = PIDTunerTable.getEntry("All Key Names").getStringArray(defaultAllKeyNames);
 
 		for (int i = 0; i < allNTNames.length; i++) {
 			Double[] Array = PIDTunerTable.getEntry(allNTNames[i]).getDoubleArray(allDummyDataValues.get(i));

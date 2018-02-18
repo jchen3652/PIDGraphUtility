@@ -1,5 +1,6 @@
 package charts;
 
+
 import java.util.ArrayList;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -33,20 +34,22 @@ public class UniversalGui extends Application {
 	}
 
 	@Override
-	public void start(Stage mainWindow) throws InterruptedException {
-
+	public void start(Stage mainWindow) throws InterruptedException {	
 		mainWindow.setTitle("FF503 PID Tuning | By James Chen and Areeb Rahim");
+		String[] defaultAllKeyNames = new String[3];
+		defaultAllKeyNames[0] = "x";
+		defaultAllKeyNames[1] = "y";
+		defaultAllKeyNames[2] = "y2";
+
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(10, 10, 10, 10));
 		grid.setHgap(10);
 		grid.setVgap(10);
-		String[] defaultd = new String[2];
-		defaultd[0] = "test0";
-		defaultd[1] = "test1";
+		
 		ObservableList<String> tunerOptions = FXCollections.observableArrayList();
 
-		String[] allKeyNames = PIDTunerTable.getEntry("All Key Names").getStringArray(defaultd);
-		for (String o : PIDTunerTable.getEntry("All Key Names").getStringArray(defaultd)) {
+		String[] allKeyNames = PIDTunerTable.getEntry("All Key Names").getStringArray(defaultAllKeyNames);
+		for (String o : PIDTunerTable.getEntry("All Key Names").getStringArray(defaultAllKeyNames)) {
 			tunerOptions.add(o);
 		}
 
@@ -62,13 +65,14 @@ public class UniversalGui extends Application {
 		graphThings.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
+				UniversalGraphingUtility.yIndexes.clear();
 				for (int i = 0; i < checkBoxArray.size(); i++) {
 					if (checkBoxArray.get(i).isSelected()) {
+						
 						UniversalGraphingUtility.yIndexes.add(i);
 						// UniversalGraphingUtility.addDependentVariableIndex(i);
 					}
 				}
-
 				UniversalGraphingUtility.runGraph();
 				graphWindow.setTitle("FF503 PID Tuning | Written by James Chen and Areeb Rahim");
 				graphWindow.setScene(UniversalGraphingUtility.scene);
@@ -79,11 +83,11 @@ public class UniversalGui extends Application {
 		final ComboBox<String> tunerBox = new ComboBox<String>(tunerOptions);
 		tunerBox.setPromptText("X Variable");
 
-		grid.add(new Label("What Y variables should be graphed?"), 0, 1);
+		grid.add(new Label("What should be on the y axis?"), 0, 1);
 		for (int i = 0; i < allKeyNames.length; i++) {
 			grid.add(checkBoxArray.get(i), 0, i + 2);
 		}
-		grid.add(new Label("What should be x variable? "), 0, 0);
+		grid.add(new Label("What should be on the x axis? "), 0, 0);
 		grid.add(tunerBox, 1, 0);
 
 		grid.add(graphThings, 0, allKeyNames.length + 3);
