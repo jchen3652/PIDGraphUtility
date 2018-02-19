@@ -27,7 +27,7 @@ public class UniversalGui extends Application {
 	static ArrayList<CheckBox> checkBoxArray;
 
 	public static void main(String[] args) throws InterruptedException {
-		NetworkTableInstance.getDefault().startClient("localhost");// localhost roboRIO-500-FRC.local
+		NetworkTableInstance.getDefault().startClient("roboRIO-502-FRC.local");// localhost roboRIO-500-FRC.local
 																				// roboRIO-502-FRC.local
 		PIDTunerTable = NetworkTableInstance.getDefault().getTable("UniversalGrapher");
 		Thread.sleep(3000);
