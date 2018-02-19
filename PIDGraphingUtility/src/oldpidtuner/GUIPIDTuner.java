@@ -51,11 +51,6 @@ public class GUIPIDTuner extends Application {
 		final ComboBox<String> tunerBox = new ComboBox<String>(tunerOptions);
 		tunerBox.setPromptText("Tuner Type");
 
-		StackPane sp = new StackPane();
-		Image img = new Image("https://pbs.twimg.com/profile_images/874276197357596672/kUuht00m.jpg");
-		ImageView imgView = new ImageView(img);
-		// sp.getChildren().add(imgView);
-
 		final TextField pInput = new TextField();
 		pInput.setPromptText("P Value");
 		pInput.setPrefColumnCount(10);
@@ -163,7 +158,7 @@ public class GUIPIDTuner extends Application {
 				GridPane.setConstraints(tolerance, 1, 5);
 				grid.getChildren().add(tolerance);
 
-				grid.add(sp, 3, 0);
+
 				grid.add(startRobot, 0, 6);
 				grid.add(loadDefaultValues, 0, 7);
 				grid.add(stopRobot, 0, 8);
@@ -186,7 +181,7 @@ public class GUIPIDTuner extends Application {
 				GridPane.setConstraints(tolerance, 1, 4);
 				grid.getChildren().add(tolerance);
 
-				grid.add(sp, 3, 0);
+				
 				grid.add(startRobot, 0, 5);
 				grid.add(loadDefaultValues, 0, 6);
 				grid.add(stopRobot, 0, 7);
