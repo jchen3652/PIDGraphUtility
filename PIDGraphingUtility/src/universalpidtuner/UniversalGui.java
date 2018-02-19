@@ -1,4 +1,4 @@
-package charts;
+package universalpidtuner;
 
 
 import java.util.ArrayList;
@@ -27,9 +27,9 @@ public class UniversalGui extends Application {
 	static ArrayList<CheckBox> checkBoxArray;
 
 	public static void main(String[] args) throws InterruptedException {
-		NetworkTableInstance.getDefault().startClient("roboRIO-500-FRC.local");// localhost roboRIO-500-FRC.local
+		NetworkTableInstance.getDefault().startClient("localhost");// localhost roboRIO-500-FRC.local
 																				// roboRIO-502-FRC.local
-		PIDTunerTable = NetworkTableInstance.getDefault().getTable("PIDTuner");
+		PIDTunerTable = NetworkTableInstance.getDefault().getTable("UniversalGrapher");
 		Thread.sleep(3000);
 		
 		launch(args);
@@ -42,7 +42,7 @@ public class UniversalGui extends Application {
 		defaultAllKeyNames[0] = "x";
 		defaultAllKeyNames[1] = "y";
 		defaultAllKeyNames[2] = "y2";
-
+		
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(10, 10, 10, 10));
 		grid.setHgap(10);
@@ -82,7 +82,7 @@ public class UniversalGui extends Application {
 					}
 				}
 				UniversalGraphingUtility.runGraph();
-				graphWindow.setTitle("FF503 PID Tuning | Written by James Chen and Areeb Rahim");
+				graphWindow.setTitle("FF503 Universal Grapher");
 				graphWindow.setScene(UniversalGraphingUtility.scene);
 				graphWindow.show();
 			}
