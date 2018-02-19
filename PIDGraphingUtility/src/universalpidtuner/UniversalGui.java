@@ -1,6 +1,5 @@
 package universalpidtuner;
 
-
 import java.util.ArrayList;
 
 import edu.wpi.first.networktables.NetworkTable;
@@ -20,7 +19,6 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 public class UniversalGui extends Application {
-	int i;
 	int pointsToGraph;
 	static NetworkTable PIDTunerTable;
 	Stage graphWindow = new Stage();
@@ -31,23 +29,23 @@ public class UniversalGui extends Application {
 																				// roboRIO-502-FRC.local
 		PIDTunerTable = NetworkTableInstance.getDefault().getTable("UniversalGrapher");
 		Thread.sleep(3000);
-		
+
 		launch(args);
 	}
 
 	@Override
-	public void start(Stage mainWindow) throws InterruptedException {	
+	public void start(Stage mainWindow) throws InterruptedException {
 		mainWindow.setTitle("FF503 PID Tuning | By James Chen and Areeb Rahim");
 		String[] defaultAllKeyNames = new String[3];
 		defaultAllKeyNames[0] = "x";
 		defaultAllKeyNames[1] = "y";
 		defaultAllKeyNames[2] = "y2";
-		
+
 		GridPane grid = new GridPane();
 		grid.setPadding(new Insets(10, 10, 10, 10));
 		grid.setHgap(10);
 		grid.setVgap(10);
-		
+
 		ObservableList<String> tunerOptions = FXCollections.observableArrayList();
 
 		String[] allKeyNames = PIDTunerTable.getEntry("All Key Names").getStringArray(defaultAllKeyNames);
@@ -61,7 +59,7 @@ public class UniversalGui extends Application {
 			cb.setText(o);
 			checkBoxArray.add(cb);
 		}
-		
+
 		Button graphThings = new Button();
 		graphThings.setText("Graph");
 		graphThings.setOnAction(new EventHandler<ActionEvent>() {
@@ -70,15 +68,13 @@ public class UniversalGui extends Application {
 				try {
 					Thread.sleep(3000);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				UniversalGraphingUtility.yIndexes.clear();
 				for (int i = 0; i < checkBoxArray.size(); i++) {
 					if (checkBoxArray.get(i).isSelected()) {
-						
+
 						UniversalGraphingUtility.yIndexes.add(i);
-						// UniversalGraphingUtility.addDependentVariableIndex(i);
 					}
 				}
 				UniversalGraphingUtility.runGraph();

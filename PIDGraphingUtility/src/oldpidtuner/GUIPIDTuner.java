@@ -13,11 +13,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 public class GUIPIDTuner extends Application {
@@ -64,7 +61,7 @@ public class GUIPIDTuner extends Application {
 		dInput.setPrefColumnCount(10);
 
 		final TextField targetInput = new TextField();
-		
+
 		targetInput.setPrefColumnCount(10);
 
 		final TextField tolerance = new TextField();
@@ -153,21 +150,20 @@ public class GUIPIDTuner extends Application {
 				GridPane.setConstraints(targetInput, 1, 4);
 				grid.getChildren().add(targetInput);
 				targetInput.setPromptText("Distance Value");
-				
+
 				grid.add(new Label("Enter the Tolerance in Inches: "), 0, 5);
 				GridPane.setConstraints(tolerance, 1, 5);
 				grid.getChildren().add(tolerance);
-
 
 				grid.add(startRobot, 0, 6);
 				grid.add(loadDefaultValues, 0, 7);
 				grid.add(stopRobot, 0, 8);
 
-			} else if (newItem == "MP Turn PID"){
+			} else if (newItem == "MP Turn PID") {
 				grid.add(new Label("Enter the P Value: "), 0, 1);
 				GridPane.setConstraints(pInput, 1, 1);
 				grid.getChildren().add(pInput);
-				
+
 				grid.add(new Label("Enter the D Value: "), 0, 2);
 				GridPane.setConstraints(dInput, 1, 2);
 				grid.getChildren().add(dInput);
@@ -176,12 +172,11 @@ public class GUIPIDTuner extends Application {
 				GridPane.setConstraints(targetInput, 1, 3);
 				grid.getChildren().add(targetInput);
 				targetInput.setPromptText("Angle Measure");
-				
+
 				grid.add(new Label("Enter the Tolerance in Inches: "), 0, 4);
 				GridPane.setConstraints(tolerance, 1, 4);
 				grid.getChildren().add(tolerance);
 
-				
 				grid.add(startRobot, 0, 5);
 				grid.add(loadDefaultValues, 0, 6);
 				grid.add(stopRobot, 0, 7);

@@ -21,7 +21,7 @@ public class UniversalGraphingUtility extends Application {
 	public static ArrayList<Integer> yIndexes = new ArrayList<Integer>();
 
 	public UniversalGraphingUtility() {
-		
+
 	}
 
 	public static void setIndependentVariableIndex(int i) {
@@ -52,9 +52,9 @@ public class UniversalGraphingUtility extends Application {
 		Double[] yValue = new Double[20];
 		Double[] y2Value = new Double[20];
 		for (int i = 0; i < 20; i++) {
-			xValue[i] = i*1.0;
+			xValue[i] = i * 1.0;
 			yValue[i] = Math.pow(i, 0.333333) * 1.0;
-			y2Value[i] = i/4.0;
+			y2Value[i] = i / 4.0;
 		}
 		ArrayList<Double[]> allDummyDataValues = new ArrayList<Double[]>();
 		allDummyDataValues.add(xValue);

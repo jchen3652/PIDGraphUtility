@@ -11,16 +11,19 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.stage.Stage;
+
 @SuppressWarnings({ "unchecked", "rawtypes" })
 public class PIDChart extends Application {
 	static NetworkTable PIDTunerTable;
 	static Double[] clearArray = new Double[0];
 	static Scene scene;
+
 	public PIDChart() {
 		NetworkTableInstance.getDefault().startClient("roboRIO-500-FRC.local");// localhost;
-		PIDTunerTable = NetworkTableInstance.getDefault().getTable("PIDTuner"); // roboRIO-500-FRC.local;// roboRIO-502-FRC.local
+		PIDTunerTable = NetworkTableInstance.getDefault().getTable("PIDTuner"); // roboRIO-500-FRC.local;//
+																				// roboRIO-502-FRC.local
 	}
-	
+
 	public static void runGraph() {
 		try {// Network tables access is slow you must delay 3 seconds to give it a chance to
 			Thread.sleep(3000);
@@ -60,7 +63,7 @@ public class PIDChart extends Application {
 		}
 
 		// Set properties for graph window
-		
+
 		final CategoryAxis xAxis = new CategoryAxis();
 		final NumberAxis yAxis = new NumberAxis();
 		xAxis.setLabel("Time");
@@ -100,8 +103,7 @@ public class PIDChart extends Application {
 			lineChart.getData().add(seriesObjectsArray.get(3 * i + 2));
 		}
 	}
-	
-	
+
 	@Override
 	public void start(Stage graphWindow) {
 		runGraph();
